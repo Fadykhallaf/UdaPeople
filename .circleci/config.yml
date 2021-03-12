@@ -133,7 +133,7 @@ jobs:
           name: Scan Backend (Security Vulnerabilities)
           command: |
             cd backend
-            npm audit --audit-level=critical
+            npm audit --audit-level=critical --force
   
       
 
