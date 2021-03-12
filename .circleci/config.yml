@@ -9,7 +9,8 @@ commands:
   destroy-environment:
     description: Destroy back-end and front-end cloudformation stacks given a workflow ID.
     parameters:
-      # Add parameter here   
+      id:
+        type: string   
     steps:
       - run:
           name: Destroy environments
@@ -21,7 +22,8 @@ commands:
   revert-migrations:
     description: Revert the last migration if successfully run in the current workflow.
     parameters:
-      # Add parameter here     
+      id:
+        type: string
     steps:
       - run:
           name: Revert migrations
@@ -73,42 +75,42 @@ jobs:
           key: backend-build
 
   test-frontend:
-    docker:
-      # Docker image here
+    <<: *defaults
+    
     steps:
+      - checkout
       # Checkout code from git
       # Restore from cache
       # Your job code here
                 
   test-backend:
-    docker:
-      # Docker image here
+    <<: *defaults
     steps:
+      - checkout
       # Checkout code from git
       # Restore from cache
       # Your job code here
             
   scan-frontend:
-    docker:
-      # Docker image here
+    <<: *defaults
     steps:
+      - checkout
       # Checkout code from git
       # Restore from cache
       # Your job code here
 
   scan-backend:
-    docker:
-      # Docker image here
+    <<: *defaults
     steps:
+      - checkout
       # Checkout code from git
       # Restore from cache
       # Your job code here
 
   deploy-infrastructure:
-    docker:
-      # Docker image here that supports AWS CLI
+    <<: *defaults
     steps:
-      # Checkout code from git
+      - checkout
       - run:
           name: Ensure back-end infrastructure exists
           command: |
@@ -139,7 +141,7 @@ jobs:
       # Here's where you will add some code to rollback on failure      
 
   configure-infrastructure:
-    docker:
+    <<: *defaults
       # Docker image here that supports Ansible
     steps:
       # Checkout code from git
@@ -158,7 +160,7 @@ jobs:
       # Here's where you will add some code to rollback on failure      
 
   run-migrations:
-    docker:
+    <<: *defaults
       # Docker image here that supports NodeJS
     steps:
       # Checkout code from git
@@ -175,7 +177,7 @@ jobs:
      # Here's where you will add some code to rollback on failure      
 
   deploy-frontend:
-    docker:
+    <<: *defaults
       # Docker image here that supports AWS CLI
     steps:
       # Checkout code from git
@@ -196,7 +198,7 @@ jobs:
       # Here's where you will add some code to rollback on failure      
                     
   deploy-backend:
-    docker:
+    <<: *defaults
       # Docker image here that supports Ansible
     steps:
       # Checkout code from git
@@ -213,7 +215,7 @@ jobs:
       # Here's where you will add some code to rollback on failure  
 
   smoke-test:
-    docker:
+    <<: *defaults
       # Lightweight Docker image 
     steps:
       # Checkout code from git
@@ -236,7 +238,7 @@ jobs:
       # Here's where you will add some code to rollback on failure  
 
   cloudfront-update:
-    docker:
+    <<: *defaults
       # Docker image here that supports AWS CLI
     steps:
       # Checkout code from git
@@ -250,8 +252,8 @@ jobs:
             # your code here
       # Here's where you will add some code to rollback on failure  
 
-cleanup:
-    docker:
+  cleanup:
+    <<: *defaults
       # Docker image here
     steps:
       # Checkout code from git
