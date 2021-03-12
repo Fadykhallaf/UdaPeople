@@ -1,5 +1,9 @@
 version: 2.1
 
+# Using Slack orbs to send messages to dev team channel
+orbs:
+  slack: circleci/slack@4.3.1
+
 #Using anchors to make code easier to maintain
 defaults: &defaults
   docker:
@@ -111,17 +115,27 @@ jobs:
     <<: *defaults
     steps:
       - checkout
-      # Checkout code from git
-      # Restore from cache
-      # Your job code here
+      - restore_cache:
+          key: "frontend-build"
+      - run:
+          name: Scan frontent
+          command: |
+            cd frontend
+            npm audit --audit-level=critical
 
   scan-backend:
     <<: *defaults
     steps:
       - checkout
-      # Checkout code from git
-      # Restore from cache
-      # Your job code here
+      - restore_cache:
+          key: "backend-build"
+      - run:
+          name: Scan Backend (Security Vulnerabilities)
+          command: |
+            cd backend
+            npm audit --audit-level=critical
+  
+      
 
   deploy-infrastructure:
     <<: *defaults
