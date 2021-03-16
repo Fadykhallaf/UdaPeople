@@ -139,7 +139,7 @@ jobs:
 
   deploy-infrastructure:
     docker:
-      - image: amazon/aws-cli
+      - image: amazon/aws-cli:latest
     steps:
       - checkout
       - run:
@@ -162,6 +162,7 @@ jobs:
       - run:
           name: Add back-end ip to ansible inventory
           command: |
+            apk add tar
             cd .circleci/ansible            
             aws ec2 describe-instances \
               --query 'Reservations[*].Instances[*].PublicIpAddress' \
@@ -313,7 +314,7 @@ workflows:
   default:
     jobs:
       # - build-frontend
-      - build-backend
+      # - build-backend
       # - test-frontend:
       #     requires: [build-frontend]
       # - test-backend:
