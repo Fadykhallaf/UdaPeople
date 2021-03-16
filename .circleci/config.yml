@@ -162,7 +162,7 @@ jobs:
       - run:
           name: Add back-end ip to ansible inventory
           command: |
-            # apk add tar
+            apt -y install tar
             cd .circleci/ansible            
             aws ec2 describe-instances \
               --query 'Reservations[*].Instances[*].PublicIpAddress' \
