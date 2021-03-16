@@ -143,6 +143,11 @@ jobs:
     steps:
       - checkout
       - run:
+          name: Install Requirements
+          command: | 
+            yum -y install tar gzip jq 
+            
+      - run:
           name: Ensure back-end infrastructure exists
           command: |
             aws cloudformation deploy \
@@ -162,7 +167,6 @@ jobs:
       - run:
           name: Add back-end ip to ansible inventory
           command: |
-            apt -y install tar
             cd .circleci/ansible            
             aws ec2 describe-instances \
               --query 'Reservations[*].Instances[*].PublicIpAddress' \
