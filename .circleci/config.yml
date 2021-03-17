@@ -232,7 +232,7 @@ jobs:
           command: |
             cd backend
             echo before
-            MIGRATION_NUM=`grep -c "has been executed successfully" migrations-output.txt`
+            MIGRATION_NUM=$(grep -c "has been executed successfully" migrations-output.txt)
             echo $MIGRATION_NUM
             echo after
             curl -H "Content-Type: text/plain" \
