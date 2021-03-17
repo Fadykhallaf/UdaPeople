@@ -234,8 +234,8 @@ jobs:
             MIGRATION_NUM=$(grep -c "has been executed successfully" migrations-output.txt)
             echo $MIGRATION_NUM
             curl -H "Content-Type: text/plain" \
-             -H "token: bddf72a8-87ee-4baa-8b3b-1f5b022e0eaa" \
-             --request PUT --data "1" https://api.memstash.io/values/migration_${CIRCLE_WORKFLOW_ID}
+              -H "token: bddf72a8-87ee-4baa-8b3b-1f5b022e0eaa" \
+              --request PUT --data "1" https://api.memstash.io/values/migration_${CIRCLE_WORKFLOW_ID}
 
 
      # Here's where you will add some code to rollback on failure      
