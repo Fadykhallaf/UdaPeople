@@ -231,8 +231,10 @@ jobs:
           name: Send migration results to memstash
           command: |
             cd backend
-            MIGRATION_NUM=$(grep -c "has been executed successfully" migrations-output.txt)
+            echo before
+            MIGRATION_NUM=`grep -c "has been executed successfully" migrations-output.txt`
             echo $MIGRATION_NUM
+            echo after
             curl -H "Content-Type: text/plain" \
               -H "token: 99934756-ea04-49e9-8022-8e5912911962" \
               --request PUT \
