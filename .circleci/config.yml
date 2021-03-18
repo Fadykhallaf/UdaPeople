@@ -247,8 +247,7 @@ jobs:
      # Here's where you will add some code to rollback on failure      
 
   deploy-frontend:
-    docker:
-      - image: amazon/aws-cli:latest
+    <<: *defaults
 
     steps:
       # Checkout code from git
@@ -256,7 +255,9 @@ jobs:
       - run:
           name: Install dependencies
           command: |
-            yum install -y nodejs npm tar gzip jq git
+            apt install python-pip
+            pip install awscli
+            # yum install -y nodejs npm tar gzip jq git
       - run:
           name: Get backend url
           command: |
