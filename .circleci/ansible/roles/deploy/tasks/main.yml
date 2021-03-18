@@ -2,39 +2,30 @@
 - name: "upgrade packages."
   become: true
   apt:
-    upgrade: yes
+    upgrade: "yes"
 
 - name: "install dependencies."
   become: true
   apt:
-    name: ["nodejs", "npm"]
+    name: ["nodejs", "npm", "tar"]
+    state: latest
     update_cache: yes
 
-- name: "project backend files"
+- name: "copy backend folder"
   become: true
   copy:
-    src: ~/project/backend/
+    src: /root/project/backend
     dest: /home/ubuntu
 
-
-- name: latest npm version
-  become: true
-  command: npm install -g npm
-
-- name: "Run Build"
-  command: npm run build
-  args:
-    chdir: /home/ubuntu
-
-- name: "verify dist"
-  become: true
-  command: ls
-  args:
-    chdir: /home/ubuntu
-
-
-- name: "run backend app"
-  become: true
-  command: pm2 start npm -- run "start"
-  args:
-    chdir: /home/ubuntu
+- name: Install Node Dependencies
+  shell: |
+    cd /home/ubuntu/backend
+    npm install
+- name: Building backend service
+  shell: |
+    cd /home/ubuntu/backend
+    npm run build
+- name: Running backend service
+  shell: |
+    cd /home/ubuntu/backend    
+    pm2 start npm --no-automation --name "backend" -- run start

@@ -284,7 +284,8 @@ jobs:
           name: Install dependencies
           command: |
             apk add --update ansible
-            apk add nodejs npm tar git curl jq
+            apk add nodejs npm gzip tar git curl jq 
+            pip install awscli
       
       - attach_workspace:
           at: ~/
