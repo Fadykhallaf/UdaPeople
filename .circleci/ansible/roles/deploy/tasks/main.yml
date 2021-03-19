@@ -1,31 +1,21 @@
 ---
 - name: "upgrade packages."
-  become: true
+  become: yes
   apt:
-    upgrade: "yes"
+    upgrade: yes
 
-- name: "install dependencies."
-  become: true
-  apt:
-    name: ["nodejs", "npm", "tar"]
-    state: latest
-    update_cache: yes
+- name: deploy backend
+  become_user: ubuntu
+  unarchive:
+    src: ../../backend/artifact.tar.gz
+    dest: ~/udapeople/
+    owner: ubuntu
+    group: ubuntu
+    mode: 0755
 
-- name: "copy backend folder"
-  become: true
-  copy:
-    src: /root/project/backend
-    dest: /home/ubuntu
-
-- name: Install Node Dependencies
-  shell: |
-    cd /home/ubuntu/backend
-    npm install
-- name: Building backend service
-  shell: |
-    cd /home/ubuntu/backend
-    npm run build
 - name: Running backend service
+  become_user: ubuntu
   shell: |
-    cd /home/ubuntu/backend    
-    pm2 start npm --no-automation --name "backend" -- run start
+    cd ~/udapeople/
+    npm i    
+    pm2 start npm -- run start
