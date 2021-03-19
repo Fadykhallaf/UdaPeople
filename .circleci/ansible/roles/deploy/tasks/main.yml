@@ -20,12 +20,12 @@
     state: present
 
 
-# - name: " update dependancies"
-#   become: true
-#   shell: |
-#     curl -sL https://deb.nodesource.com/setup_10.x | sudo -E bash -
-#     apt-get install -y nodejs  
-#     npm install --save glob
+- name: " update dependancies"
+  become: true
+  shell: |
+    curl -sL https://deb.nodesource.com/setup_10.x | sudo -E bash -
+    apt-get install -y nodejs  
+    npm install --save glob
     
 - name: "Copy backend build to server"
   become: yes
