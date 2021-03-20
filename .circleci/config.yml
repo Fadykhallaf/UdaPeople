@@ -249,22 +249,24 @@ jobs:
 
     steps:
       - checkout
+      - restore_cache:
+          keys: [frontend-build]
       - run:
           name: Install dependencies
           command: |
             sudo apt install python-pip
             sudo pip install awscli
-            sudo npm install -g webpack webpack-cli
+            # sudo npm install -g webpack webpack-cli
             # yum install -y nodejs npm tar gzip jq git
       - run:
-          name: Get backend url
+          name: Get backend 
           command: |
             BACKEND_IP=`curl -H "token: 2669c9d4-3f74-4218-86a9-9a88f26895b0" \
               --request GET https://api.memstash.io/values/BACKEND_INSTANCE_IP_${CIRCLE_WORKFLOW_ID}`
             export API_URL="http://${BACKEND_IP}:3030"
             echo "${API_URL}"
             cd frontend
-            npm install
+            npm i
             npm run build
       - run:
           name: Deploy frontend objects
