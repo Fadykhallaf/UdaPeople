@@ -40,6 +40,15 @@ commands:
               npm install
               npm run migrations:revert
             fi
+  
+  slack-failure-notification:
+    description: send a notification to slack channel in the case of pipeline failed
+    steps:
+      - run:
+          name: Slack Notification
+          channel: dev-team
+          event: fail
+          template: basic_fail_1
             
 jobs:
   build-frontend:
@@ -339,12 +348,13 @@ jobs:
             URL="http://udapeople-${CIRCLE_WORKFLOW_ID}.s3-website-us-east-1.amazonaws.com"
             if curl -s ${URL} | grep "Welcome"
             then
-              return 0
-            else
               return 1
+            else
+              return 0
             fi
       - destroy-environment
-      - revert-migrations  
+      - revert-migrations
+      - slack-failure-notification  
 
   cloudfront-update:
     docker:
@@ -362,7 +372,7 @@ jobs:
               --template-file .circleci/files/cloudfront.yml \
               --tags project=udapeople \
               --stack-name udapeople-cloudfront \
-              --parameter-overrides WorkflowID=k333ylerjh
+              --parameter-overrides WorkflowID=${CIRCLE_WORKFLOW_ID}
       - destroy-environment
       - revert-migrations  
 
