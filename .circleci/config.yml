@@ -43,11 +43,6 @@ commands:
   
   slack-failure-notification:
     description: send a notification to slack channel in the case of pipeline failed
-    steps:
-      - run:
-          name: Install required packages
-          command: |
-            apk add jq curl
       - slack/notify:
           channel: dev-team
           event: fail
@@ -160,7 +155,7 @@ jobs:
       - run:
           name: Ensure back-end infrastructure exists
           command: |
-            aws cloudformation deploy \
+            aws cloudformation ddeploy \
               --template-file .circleci/files/backend.yml \
               --tags project=udapeople-backend \
               --stack-name udapeople-backend-${CIRCLE_WORKFLOW_ID} \
@@ -197,6 +192,7 @@ jobs:
           paths:
             - project/.circleci/ansible/inventory.txt
       - destroy-environment
+      - slack-failure-notification
 
   configure-infrastructure:
     docker:
@@ -337,7 +333,7 @@ jobs:
       - run:
           name: Install dependencies
           command: |
-            apk add --update curl nodejs npm
+            apk add --update curl nodejs npm jq
             pip install awscli
       - run:
           name: Get backend url && backend smoke test
