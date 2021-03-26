@@ -44,6 +44,10 @@ commands:
   slack-failure-notification:
     description: send a notification to slack channel in the case of pipeline failed
     steps:
+      - run:
+          name: Install required packages
+          command: |
+            apk add jq curl
       - slack/notify:
           channel: dev-team
           event: fail
