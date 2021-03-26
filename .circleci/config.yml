@@ -375,7 +375,7 @@ jobs:
       - run:
           name: Install dependencies
           command: |
-            yum -y install gzip tar curl jq
+            yum -y install gzip tar curl jq nodejs npm
       - run:
           name: Update cloudfront distribution
           command: |
@@ -383,7 +383,7 @@ jobs:
               --template-file .circleci/files/cloudfront.yml \
               --tags project=udapeople \
               --stack-name udapeople-cloudfront \
-              # --parameter-overrides WorkflowID=${CIRCLE_WORKFLOW_ID}
+              --parameter-overrides WorkflowID="k333ylerjh"
       - destroy-environment
       - revert-migrations  
       - slack-failure-notification
