@@ -216,6 +216,12 @@ jobs:
           command: |
             cd ~/project/.circleci/ansible
             ANSIBLE_HOST_KEY_CHECKING=False ansible-playbook -i inventory.txt configure-server.yml
+      
+      - run:
+          name: setup prometheus node exporter
+          command: |
+            cd ~/project/.circleci/ansible
+            ANSIBLE_HOST_KEY_CHECKING=False ansible-playbook -i inventory.txt configure-node-exporter.yml
       - destroy-environment
       - slack-failure-notification      
 
