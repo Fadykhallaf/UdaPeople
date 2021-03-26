@@ -43,6 +43,7 @@ commands:
   
   slack-failure-notification:
     description: send a notification to slack channel in the case of pipeline failed
+    steps:
       - slack/notify:
           channel: dev-team
           event: fail
