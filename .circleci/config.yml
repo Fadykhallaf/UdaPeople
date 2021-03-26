@@ -429,23 +429,23 @@ workflows:
       - test-frontend:
           requires: [build-frontend]
           filters:
-          branches:
-            only: [udapeople-dev]
+            branches:
+              only: [udapeople-dev]
       - test-backend:
           requires: [build-backend]
           filters:
-          branches:
-            only: [udapeople-dev]
+            branches:
+              only: [udapeople-dev]
       - scan-backend:
           requires: [build-backend]
           filters:
-          branches:
-            only: [udapeople-dev]
+            branches:
+              only: [udapeople-dev]
       - scan-frontend:
           requires: [build-frontend]
           filters:
-          branches:
-            only: [udapeople-dev]
+            branches:
+              only: [udapeople-dev]
       - deploy-infrastructure
           # requires: [test-frontend, test-backend, scan-frontend, scan-backend]
           # filters:
