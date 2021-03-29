@@ -61,7 +61,8 @@ jobs:
           name: Build front-end
           command: |
             cd frontend
-            npm i 
+            npm i
+            npm audit fix --audit-level=critical --force 
             npm run build
       - save_cache:
           paths: [frontend/node_modules]
@@ -79,6 +80,7 @@ jobs:
           command: |
             cd backend
             npm i
+            npm audit fix --audit-level=critical --force
             npm run build
       - save_cache:
           paths: [backend/node_modules]
@@ -430,8 +432,8 @@ workflows:
           requires: [build-backend]
       - scan-frontend:
           requires: [build-frontend]
-      - deploy-infrastructure
-          # requires: [test-frontend, test-backend, scan-frontend, scan-backend]
+      - deploy-infrastructure:
+          requires: [test-frontend, test-backend, scan-frontend, scan-backend]
           # filters:
           #   branches:
           #     only: [test-feature-branch]
