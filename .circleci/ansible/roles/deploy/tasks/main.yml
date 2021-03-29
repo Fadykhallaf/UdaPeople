@@ -1,37 +1,61 @@
-- name: "upgrade packages."
-  become: true
+---
+- name: "upgrade packages"
+  become: yes
   apt:
-    upgrade: "yes"
+    upgrade: yes
+
 - name: "install dependencies."
-  become: true
+  become: yes
   apt:
     name: ["nodejs", "npm"]
+    state: latest
     update_cache: yes
+
 - name: "install pm2"
-  become: true
+  become: yes
   npm:
     name: pm2
     global: yes
     production: yes
     state: present
-- name: "copy backend file"
+
+
+- name: " update dependancies"
   become: true
+  shell: |
+    curl -sL https://deb.nodesource.com/setup_10.x | sudo -E bash -
+    apt-get install -y nodejs  
+    npm install --save glob
+    
+- name: "Copy backend build to server"
+  become: yes
+  unarchive:
+    src:  ~/project/artifact.tar.gz
+    dest: /home/ubuntu/
+    owner: ubuntu
+
+- name: "Copy package.json to server"
+  become: yes
   copy:
-    src: /root/project/backend
-    dest: /root
-    force: no
-- name: "install npm packages"
+    src: ~/project/backend/package.json
+    dest: /home/ubuntu/
+    owner: ubuntu
+    
+- name: Build backend
   become: true
-  command: npm install
-  args:
-    chdir: /root/backend
-- name: "compile npm packages"
+  shell: |
+    cd /home/ubuntu/backend
+    npm i
+    # npm install
+    # sudo npm audit --audit-level=critical --force
+    npm fund
+    npm run build
+   
+
+- name: run backend 
   become: true
-  command: npm run build
-  args:
-    chdir: /root/backend
-- name: "start server"
-  become: true
-  command: pm2 start npm -- run start
-  args:
-    chdir: /root/backend/dist
+  shell: |
+    cd /home/ubuntu/backend
+    pm2 start --name backend npm -- start
+    npm run start:prod
+    pm2 ls
