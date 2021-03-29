@@ -56,7 +56,7 @@ jobs:
     steps:
       - checkout
       - restore_cache:
-          keys: [frontend-build]
+          keys: [front-build]
       - run:
           name: Build front-end
           command: |
@@ -66,7 +66,7 @@ jobs:
             npm run build
       - save_cache:
           paths: [frontend/node_modules]
-          key: frontend-build
+          key: front-build
 
   build-backend:
     <<: *defaults
@@ -74,7 +74,7 @@ jobs:
     steps:
       - checkout
       - restore_cache:
-          keys: [backend-build]
+          keys: [back-build]
       - run:
           name: Back-end build
           command: |
@@ -84,7 +84,7 @@ jobs:
             npm run build
       - save_cache:
           paths: [backend/node_modules]
-          key: backend-build
+          key: back-build
 
   test-frontend:
     <<: *defaults
@@ -92,7 +92,7 @@ jobs:
     steps:
       - checkout
       - restore_cache:
-          key: "frontend-build"
+          key: [front-build]
       - run:
           name: Test Frontend
           command: |
@@ -101,14 +101,14 @@ jobs:
             npm run test
       - save_cache:
           paths: [frontend/node_modules]
-          key: frontend-test
+          key: front-test
                 
   test-backend:
     <<: *defaults
     steps:
       - checkout
       - restore_cache:
-          key: "backend-build"
+          key: "back-build"
       - run:
           name: Test Backend
           command: |
@@ -117,14 +117,14 @@ jobs:
             npm run test
       - save_cache:
           paths: [backend/node_modules]
-          key: backend-test
+          key: back-test
             
   scan-frontend:
     <<: *defaults
     steps:
       - checkout
       - restore_cache:
-          key: "frontend-build"
+          key: [front-build]
       - run:
           name: Scan frontent
           command: |
@@ -136,7 +136,7 @@ jobs:
     steps:
       - checkout
       - restore_cache:
-          key: "backend-build"
+          key: [back-build]
       - run:
           name: Scan Backend (Security Vulnerabilities)
           command: |
@@ -234,7 +234,7 @@ jobs:
     steps:
       - checkout
       - restore_cache:
-          keys: "backend-build" 
+          keys: [back-build] 
       - run:
           name: Run migrations
           command: |
@@ -273,7 +273,7 @@ jobs:
     steps:
       - checkout
       - restore_cache:
-          keys: [frontend-build]
+          keys: [front-build]
       - run:
           name: Install dependencies
           command: |
@@ -422,16 +422,16 @@ jobs:
 workflows:
   default:
     jobs:
-      # - build-frontend
-      # - build-backend
-      # - test-frontend:
-      #     requires: [build-frontend]
-      # - test-backend:
-      #     requires: [build-backend]
-      # - scan-backend:
-      #     requires: [build-backend]
-      # - scan-frontend:
-      #     requires: [build-frontend]
+      - build-frontend
+      - build-backend
+      - test-frontend:
+          requires: [build-frontend]
+      - test-backend:
+          requires: [build-backend]
+      - scan-backend:
+          requires: [build-backend]
+      - scan-frontend:
+          requires: [build-frontend]
       - deploy-infrastructure
       #     requires: [test-frontend, test-backend, scan-frontend, scan-backend]
           # filters:
