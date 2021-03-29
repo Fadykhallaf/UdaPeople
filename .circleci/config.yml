@@ -61,8 +61,8 @@ jobs:
           name: Build front-end
           command: |
             cd frontend
-            npm install
-            # npm audit fix --audit-level=critical 
+            npm i
+            npm audit fix --audit-level=critical 
             npm run build
       - save_cache:
           paths: [frontend/node_modules]
