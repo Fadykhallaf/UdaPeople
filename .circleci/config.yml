@@ -61,8 +61,9 @@ jobs:
           name: Build front-end
           command: |
             cd frontend
-            sudo npm install npm@latest -g
-            # npm i
+            # sudo npm install npm@latest -g
+            sudo npm install -g typescript
+            npm i
             # npm audit fix --audit-level=critical 
             npm run build
       - save_cache:
