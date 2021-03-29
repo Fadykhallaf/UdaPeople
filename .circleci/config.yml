@@ -241,9 +241,9 @@ jobs:
             echo printenv
             printenv >> ./backend/.env
             cd backend
-            npm audit fix --audit-level=critical --force
-            npm fund 
             npm i
+            npm audit fix --audit-level=critical 
+            npm fund 
             npm run migrations >> migrations-output.txt
             cat migrations-output.txt
             pwd
@@ -420,16 +420,16 @@ jobs:
 workflows:
   default:
     jobs:
-      # - build-frontend
-      # - build-backend
-      # - test-frontend:
-      #     requires: [build-frontend]
-      # - test-backend:
-      #     requires: [build-backend]
-      # - scan-backend:
-      #     requires: [build-backend]
-      # - scan-frontend:
-      #     requires: [build-frontend]
+      - build-frontend
+      - build-backend
+      - test-frontend:
+          requires: [build-frontend]
+      - test-backend:
+          requires: [build-backend]
+      - scan-backend:
+          requires: [build-backend]
+      - scan-frontend:
+          requires: [build-frontend]
       - deploy-infrastructure
           # requires: [test-frontend, test-backend, scan-frontend, scan-backend]
           # filters:
