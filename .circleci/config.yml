@@ -116,8 +116,8 @@ jobs:
           name: Test Backend
           command: |
             cd backend
-            sudo npm i
-            sudo npm update
+            sudo npm i -g npm
+            sudo npm cache clean
             sudo npm install jest
             sudo npm run test        
       # - save_cache:
