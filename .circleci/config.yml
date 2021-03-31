@@ -116,9 +116,10 @@ jobs:
           name: Test Backend
           command: |
             cd backend
-            npm i
+            sudo npm i
+            sudo npm update
             sudo npm install jest
-            npm run test        
+            sudo npm run test        
       - save_cache:
           paths: [backend/node_modules]
           key: back-test-v1
@@ -426,7 +427,7 @@ jobs:
 workflows:
   default:
     jobs:
-      - test-frontend
+      # - test-frontend
       - test-backend
       # - build-frontend
       # - build-backend
