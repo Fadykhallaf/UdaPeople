@@ -56,18 +56,16 @@ jobs:
     steps:
       - checkout
       - restore_cache:
-          keys: [front-build]
+          keys: [front-build-v1]
       - run:
           name: Build front-end
           command: |
             cd frontend
-            # sudo npm install npm@latest -g
-            sudo npm i webpack -g
-            # npm audit fix --audit-level=critical 
+            npm install
             npm run build
       - save_cache:
           paths: [frontend/node_modules]
-          key: front-build
+          key: front-build-v1
 
   build-backend:
     <<: *defaults
@@ -75,20 +73,16 @@ jobs:
     steps:
       - checkout
       - restore_cache:
-          keys: [back-build]
+          keys: [back-build-v1]
       - run:
           name: Back-end build
           command: |
             cd backend
-            # npm install
-            # sudo npm install npm@latest -g
-            sudo npm install -g typescript
-            npm i
-            # npm audit fix --audit-level=critical
+            npm install 
             npm run build
       - save_cache:
           paths: [backend/node_modules]
-          key: back-build
+          key: back-build-v1
 
   test-frontend:
     <<: *defaults
@@ -96,7 +90,7 @@ jobs:
     steps:
       - checkout
       - restore_cache:
-          keys: [front-build]
+          keys: [front-test-v1]
       - run:
           name: Test Frontend
           command: |
@@ -105,24 +99,23 @@ jobs:
             npm run test
       - save_cache:
           paths: [frontend/node_modules]
-          key: front-test
+          key: front-test-v1
                 
   test-backend:
     <<: *defaults
     steps:
       - checkout
       - restore_cache:
-          key: "back-build"
+          key: "back-test-v1"
       - run:
           name: Test Backend
           command: |
             cd backend
-            sudo npm install -g jest-cli
             npm i 
             npm run test
       - save_cache:
           paths: [backend/node_modules]
-          key: back-test
+          key: back-test-v1
             
   scan-frontend:
     <<: *defaults
