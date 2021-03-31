@@ -100,7 +100,7 @@ jobs:
             cd frontend    
             npm i       
             npm update
-            npm install jest
+            sudo npm install jest
             npm run test
       - save_cache:
           paths: [frontend/node_modules]
@@ -116,8 +116,9 @@ jobs:
           name: Test Backend
           command: |
             cd backend
-            sudo npm install
-            sudo npm run test        
+            npm i
+            npm install jest
+            npm run test        
       - save_cache:
           paths: [backend/node_modules]
           key: back-test-v1
